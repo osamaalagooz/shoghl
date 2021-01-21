@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+<div class="bradcam_area bradcam_bg_1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text">
+                    <h3>Add Your Post</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="apply_job_form white-bg">
+                      
+    {# Display a form #}
+
+<form method="post" class="form" enctype="multipart/form-data">
+    
+    {% csrf_token %}
+    {{ jobForm.media}}
+    {% bootstrap_form jobForm %}
+    {% buttons %}
+        <button class="boxed-btn3 w-100" type="submit">Post</button>
+    {% endbuttons %}
+
+</form>
+</div>
+{% endblock body %}
+    

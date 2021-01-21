@@ -1,0 +1,364 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load blog_tags %}
+{% load taggit_templatetags2_tags %}
+
+{% block body %}
+    <!-- bradcam_area  -->
+  <div class="bradcam_area bradcam_bg_1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text">
+                    <h3>{{post.title|title}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ bradcam_area  -->
+
+ <!--================Blog Area =================-->
+ <section class="blog_area single-post-area section-padding">
+    <div class="container">
+       <div class="row">
+          <div class="col-lg-8 posts-list">
+             <div class="single-post">
+                <div class="feature-img">
+                   <img class="img-fluid" src="{{post.image.url}}" alt="post image" width="730px" height="365px">
+                </div>
+                <div class="blog_details">
+                   <h2>
+                      {{post.title|title}}
+                   </h2>
+                   <ul class="blog-info-link mt-3 mb-4">
+                      <li><a href="#"><i class="fa fa-user"></i> Travel, Lifestyle</a></li>
+                      <li><a href="#"><i class="fa fa-comments"></i> {{post.comments.count}} Comments</a></li>
+                   </ul>
+                   <p>
+                      {{post.body|safe}}
+                   </p>
+                   
+                </div>
+             </div>
+             <div class="navigation-top">
+                <div class="d-sm-flex justify-content-between text-center">
+                   <p class="like-info">
+                     <!-- <span class="align-middle"><i class="fa fa-heart"></i></span> Lily and 4
+                     people like this -->
+                     {% if request.user in post.likers.all %}
+                        <a class="heart_mark"  style="margin-right: 0px;" onclick="likeIt(this)" data-set= '{{post.id}}'> <i id="heart{{post.id}}" class="fa fa-heart"></i> </a>
+                        <span id="counter{{post.id}}" data-id="{{post.id}}" style="margin-right: 10px;"> {{post.likers.count}} </span>
+                     {% else %}
+                        <a class="heart_mark" style="margin-right: 0px;" onclick="likeIt(this)" data-set= '{{post.id}}'> <i id="heart{{post.id}}" class="ti-heart"></i> </a>
+                        <span id="counter{{post.id}}" data-id="{{post.id}}" style="margin-right: 10px;" > {{post.likers.count}} </span>
+                     {% endif %}
+            </p>
+                  <div class="col-sm-4 text-center my-2 my-sm-0">
+                     <!-- <p class="comment-count"><span class="align-middle"><i class="fa fa-comment"></i></span> 06 Comments</p> -->
+                  </div>
+                  <ul class="social-icons">
+                     <li><div class="fb-share-button" 
+                     data-href="{{ request.build_absolute_uri }}" 
+                     data-layout="button" data-size="small" data-mobile-iframe="false">
+                        <a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse">
+                           <i class="fa fa-facebook-f" style="font-size: large; color: #4267B2;"></i>
+                        </a>
+                     </div>
+                  </li>
+      
+                  
+                   </ul>
+                </div>
+                
+             </div>
+             <div class="blog-author">
+                <div class="media align-items-center">
+                  {% if post.author.candidate %}
+                  <img src="{{post.author.candidate.image.url}}" alt="author-profile">
+                  <div class="media-body">
+                     <a href="#">
+                        <h4>{{post.author.first_name}}</h4>
+                     </a>
+                     <p>{{post.author.candidate.bio}}</p>
+                  </div>
+                  {% else %}
+                  <img src="{{post.author.company.logo.url}}" alt="author-profile">
+                  <div class="media-body">
+                     <a href="#">
+                        <h4>{{post.author.company.username}}</h4>
+                     </a>
+                     <p>{{post.author.company.description|safe|truncatewords:20 }}</p>
+                  </div>
+                  {% endif %}                   
+            </div>
+            <div id="area" class="comments-area">
+               <h4>{{post.comments.count}} Comments</h4>
+               {% for comment in comments %}
+               <div class="comment-list">
+                  <div class="single-comment justify-content-between d-flex">
+                     <div class="user justify-content-between d-flex">
+                        <div class="thumb">
+                           {% if comment.commenter.candidate %}
+                           <img src="{{comment.commenter.candidate.image.url}}" alt="img">
+                           {% else %}
+                           <img src="{{comment.commenter.company.logo.url}}" alt="img">
+                           {% endif %}
+                           
+                        </div>
+                        <div class="desc">
+                           <p class="comment">
+                           {{comment.body}}
+                           </p>
+                           <div class="d-flex justify-content-between">
+                              <div class="d-flex align-items-center">
+                                 <h5>
+                                    <a href="#">{{comment.commenter.first_name}}</a>
+                                 </h5>
+                                 <p class="date">{{comment.created|time_ago}}</p>
+                              </div>
+                              <!-- <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#demo">Reply</button> -->
+                                 <!-- <div id="demo" class="collapse">
+                                    <form action="/action_page.php" method="POST">
+                                       <div class="form-group">
+                                          <textarea class="form-control w-100" name="reply" id="reply" cols="30" rows="5"
+                                          placeholder="Write Comment"></textarea>
+                                       
+                                       <button type="submit" class="btn btn-success">Submit</button>
+                                       </div>
+                                    </form>
+                                 </div> -->
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+                {% endfor %}
+               
+             </div>
+             <div class="comment-form">
+                <form class="form-contact comment_form" method="POST" id="commentForm">
+                   <div class="row">
+                      <div class="col-12">
+                         <div class="form-group">
+                           <textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="6"
+                           placeholder="Write Comment"></textarea>
+                         </div>
+                      </div>
+                      <div id='toast-message-success' class="alert alert-success alert-dismissible" role="alert" style="width: 300px; display: none;" >
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        Message successfully sent !
+                        
+                      </div>
+                      <div id='toast-message-failed' class="alert alert-danger alert-dismissible" role="alert" style="width: 300px; display: none;" >
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        Oops, there is some thing wrong happened!
+                        
+                      </div>
+                      <div id="loading-icon" style="text-align: center; display: none;">
+                        <i class="fa fa-circle-o-notch fa-spin" style="font-size:30px; width: auto;"></i>
+                      </div>
+
+                   <div class="form-group">
+                      <button type="submit" id="comment-btn" data-id="{{post.id}}" class="button button-contactForm btn_1 boxed-btn">submit</button>
+                   </div>
+                </form>
+             </div>
+          </div>
+         </div>
+       </div>
+          <div class="col-lg-4">
+             <div class="blog_right_sidebar">
+                <aside class="single_sidebar_widget search_widget">
+                   <form action="#">
+                      <div class="form-group">
+                         <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder='Search Keyword'
+                               onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'">
+                            <div class="input-group-append">
+                               <button class="btn" type="button"><i class="ti-search"></i></button>
+                            </div>
+                         </div>
+                      </div>
+                      <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
+                         type="submit">Search</button>
+                   </form>
+                </aside>
+                <aside class="single_sidebar_widget post_category_widget">
+                   <h4 class="widget_title">Category</h4>
+                   <ul class="list cat-list">
+                     {% for category in categories %}
+                     <li>
+                         <a href="#" class="d-flex">
+                             <p>{{category.title}}</p>
+                             <p>({{category.posts.count}})</p>
+                         </a>
+                     </li> 
+                     {% endfor %}
+                   </ul>
+                </aside>
+                <aside class="single_sidebar_widget popular_post_widget">
+                  <h3 class="widget_title">Recent Posts</h3>
+                  {% show_recent_posts 5%}
+                   
+               </aside>
+               <aside class="single_sidebar_widget tag_cloud_widget">
+                  <h4 class="widget_title">Tag Clouds</h4>
+                  <ul class="list">
+                     {% for tag in tags %}
+                     <li>
+                        <a href="#">{{tag}}</a>
+                     </li>
+                     {% endfor %}
+                     
+                     
+                  </ul>
+               </aside>
+               <aside class="single_sidebar_widget popular_post_widget">
+                  <h3 class="widget_title">Similar Posts</h3>
+                  {% for post in similar_posts  %}
+                  <div class="media post_item">
+                     <img src="{{post.image.url}}" alt="post" width="80px" height="80px">
+                     <div class="media-body">
+                         <a href="{{post.get_absolute_url}}">
+                             <h3>{{post.title}}</h3>
+                         </a>
+                         <p>{{post.publish|time_ago}}</p>
+                     </div>
+                 </div>
+                  {% endfor %}
+              </aside>
+                <aside class="single_sidebar_widget newsletter_widget">
+                   <h4 class="widget_title">Newsletter</h4>
+                   <form action="#">
+                      <div class="form-group">
+                         <input type="email" class="form-control" onfocus="this.placeholder = ''"
+                            onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
+                      </div>
+                      <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
+                         type="submit">Subscribe</button>
+                   </form>
+                </aside>
+             </div>
+          </div>
+       </div>
+    </div>
+ </section>
+ <!--================ Blog Area end =================-->
+ <script>
+   let btn = document.querySelector('#comment-btn')
+   let postId = btn.getAttribute('data-id')
+   let csrftoken = getCookie('csrftoken');
+   console.log(postId)
+
+   btn.addEventListener('click', (e) => {
+      e.preventDefault()
+      let commentBody = document.querySelector('#comment').value
+      let commentsAria = document.querySelector("#area")
+      console.log(commentBody)
+      let data = {
+         body: commentBody
+      }
+
+      document.querySelector("#loading-icon").style.display = 'block';
+
+      fetch(`comment`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+         //'Content-Type': 'application/json',
+         "X-CSRFToken": csrftoken
+         }
+      })
+      .then((res) => res.json())
+      .then(data => {
+      document.querySelector("#loading-icon").style.display = 'none'
+      commentsAria.innerHTML += ` <div class="comment-list">
+                  <div class="single-comment justify-content-between d-flex">
+                     <div class="user justify-content-between d-flex">
+                        <div class="thumb">
+                           <img src="{{user.candidate.image.url}}" alt="img">
+                        </div>
+                        <div class="desc">
+                           <p class="comment">
+                           ${commentBody}
+                           </p>
+                           <div class="d-flex justify-content-between">
+                              <div class="d-flex align-items-center">
+                                 <h5>
+                                    <a href="#">{{user.first_name}}</a>
+                                 </h5>
+                                 <p class="date">just now</p>
+                              </div>
+                              <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#demo">Reply</button>
+                                 <div id="demo" class="collapse">
+                                    <form action="/action_page.php" method="POST">
+                                       <div class="form-group">
+                                          {% csrf_token %}
+                                          {% bootstrap_form reply_form %}
+                                       
+                                       <button type="submit" class="btn btn-success">Submit</button>
+                                       </div>
+                                    </form>
+                                 </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>`
+      console.log(data)
+      //document.querySelector("#toast-message-success").style.display = 'block'
+
+      })
+      .catch(err => {
+      console.log(err);
+      document.querySelector("#loading-icon").style.display = 'none'
+      document.querySelector("#toast-message-failed").style.display = 'block'
+      });
+
+   })
+   function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+};
+function likeIt(post) {
+            var postId = post.getAttribute("data-set");
+            console.log(postId)
+            fetch(`${postId}/like`)
+            .then(da => da.json())
+            .then(data => {
+               let count = document.getElementById(`counter${postId}`).innerHTML;
+               let num = parseInt(count)
+               let heart = document.getElementById(`heart${postId}`).classList
+               console.log(heart)
+               if (heart.contains('ti-heart')){
+
+                  heart.remove('ti-heart')
+                  heart.add('fa', 'fa-heart')
+                  document.getElementById(`counter${postId}`).innerHTML = num + 1 
+               } else {
+                  heart.remove('fa', 'fa-heart')
+                  heart.add('ti-heart')
+                  document.getElementById(`counter${postId}`).innerHTML = num - 1
+               }
+            
+               
+               console.log(data)})
+            .catch(err => console.log(err))
+            
+         }
+ </script>
+
+{% endblock body %}
+    

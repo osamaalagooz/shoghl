@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+    {% block body %}
+
+    <!-- bradcam_area  -->
+    <div class="bradcam_area bradcam_bg_1">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>Add Job</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ bradcam_area  -->
+
+    <div class="job_details_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="job_details_header">
+                        <div class="single_jobs white-bg d-flex justify-content-between">
+                            
+                           
+                        </div>
+                    </div>
+                    <div class="descript_wrap white-bg">
+                        <div class="single_wrap">
+                            <h4>Add A New Job</h4>
+                        </div>
+                        
+                    <div class="apply_job_form white-bg">
+                      
+                                {# Display a form #}
+
+                            <form method="post" class="form" enctype="multipart/form-data">
+                                
+                                {% csrf_token %}
+                                {{ jobForm.media}}
+                                {% bootstrap_form jobForm %}
+                                {% buttons %}
+                                    
+                                    <button class="boxed-btn3 w-100" type="submit">Submit</button>
+                                    
+                                
+                                {% endbuttons %}
+                            
+                            </form>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    
+  

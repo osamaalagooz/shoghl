@@ -1,0 +1,49 @@
+{% extends "base_generic.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+{% if form1.errors %}
+    {% for field in form1 %}
+        
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }} {{field.label}}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form1.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+<hr>
+{% if form2.errors %}
+    {% for field in form2 %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }} {{field.label}}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form2.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+  
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form1 %}
+
+
+    {% bootstrap_form form2 %}   
+    {{ form2.media}}                            
+    {% buttons %}
+    <input class="boxed-btn3 w-100" type="submit" value="Sign Up" />
+    
+    {% endbuttons %}
+  </form>
+  
+{% endblock %}

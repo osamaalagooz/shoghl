@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load blog_tags %}
+{% load taggit_templatetags2_tags %}
+
+
+{% block body %}
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text">
+                    <h3>blog</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ bradcam_area  -->
+<section class="blog_area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mb-5 mb-lg-0">
+                <div class="blog_left_sidebar">
+                    {% if posts %}
+                    
+                        {% for post in posts %}
+                        <article class="blog_item">
+                            <div class="blog_item_img">
+                                <img class="card-img rounded-0" src="{{post.image.url}}" alt="post_image" width="750px" height="365px">
+                                <a href="#" class="blog_item_date">
+                                    <h3>{{post.publish.day}}</h3>
+                                    <p>{{ post.publish|date:'M' }}</p>
+                                </a>
+                            </div>
+
+                            <div class="blog_details">
+                                <a class="d-inline-block" href="{{post.get_absolute_url}}">
+                                    <h2>{{post.title}}</h2>
+                                </a>
+                                <p>{{post.body|safe|truncatewords:50}}</p>
+                                <ul class="blog-info-link">
+                                    <li><a href="#"><i class="fa fa-user"></i>{% get_tags_for_object post as "tags" %} {%for tag in tags %} {{tag}}{%endfor%}</a></li>
+                                    <li><a href="#"><i class="fa fa-comments"></i> {{post.post_comments.count}} Comments</a></li>
+                                </ul>
+                            </div>
+                        </article>
+                        {% endfor %}    
+                    {% else %}
+                    <div class="alert alert-primary" role="alert">
+                         Sorry, but there is no Posts for this category, yet!<a href="{%url 'home:index'%}" class="alert-link">Go Home Page</a>
+                      </div>     
+                    {% endif %} 
+
+
+                    {% if posts.has_other_pages %}
+ 
+                    <nav class="blog-pagination justify-content-center d-flex">
+
+                        <ul class="pagination">
+                            <li class="page-item">
+                                {% if posts.has_previous %}
+                                <a href="?page={{ posts.previous_page_number }}" class="page-link" aria-label="Previous">
+                                    <i class="ti-angle-left"></i>
+                                </a>
+                                {% endif %}
+                            </li>
+                            {% for i in posts.paginator.page_range %}
+                            <li class="page-item">
+                                <a href="?page={{i}}" class="page-link">{{i}}</a>
+                            </li>
+                            {% endfor %}
+
+                            {% if posts.has_next %}
+                            <li class="page-item">
+                                <a href="?page={{ posts.next_page_number }}" class="page-link" aria-label="Next">
+                                    <i class="ti-angle-right"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="blog_right_sidebar">
+                    <aside class="single_sidebar_widget search_widget">
+                        <form action="#">
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder='Search Keyword'
+                                        onfocus="this.placeholder = ''"
+                                        onblur="this.placeholder = 'Search Keyword'">
+                                    <div class="input-group-append">
+                                        <button class="btn" type="button"><i class="ti-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
+                                type="submit">Search</button>
+                        </form>
+                    </aside>
+
+                    <aside class="single_sidebar_widget post_category_widget">
+                        <h4 class="widget_title">Category</h4>
+                        <ul class="list cat-list">
+                            
+                            {% for category in categories %}
+                            <li>
+                                <a href="#" class="d-flex">
+                                    <p>{{category.title}}</p>
+                                    <p>({{category.posts.count}})</p>
+                                </a>
+                            </li> 
+                            {% endfor %}
+
+                        </ul>
+                    </aside>
+
+                    <aside class="single_sidebar_widget popular_post_widget">
+                        <h3 class="widget_title">Recent Post</h3>
+                         {% show_recent_posts 5 %}
+                        
+                    </aside>
+                    <aside class="single_sidebar_widget tag_cloud_widget">
+                        <h4 class="widget_title">Tag Clouds</h4>
+                        <ul class="list">
+                            {% get_taglist as tags for 'blog' %} 
+                            {%for tag in tags %} 
+                            <li>
+                                <a href="#">{{tag}}</a>
+                             </li>   
+                            
+                            {%endfor%}
+                            
+                        </ul>
+                    </aside>
+
+
+                    
+
+
+                    <aside class="single_sidebar_widget newsletter_widget">
+                        <h4 class="widget_title">Newsletter</h4>
+
+                        <form action="#">
+                            <div class="form-group">
+                                <input type="email" class="form-control" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
+                            </div>
+                            <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
+                                type="submit">Subscribe</button>
+                        </form>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================Blog Area =================-->
+{% endblock body %}
+    
