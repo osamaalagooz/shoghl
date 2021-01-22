@@ -4,12 +4,12 @@
     <!--[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
-    
+
     <!-- header-start -->
     {% block body %}
     <!-- header-end -->
 
-   
+
     <!--/ bradcam_area  -->
 
     <div class="job_details_area">
@@ -18,42 +18,43 @@
                 <div class="col-lg-8">
                     <div class="job_details_header">
                         <div class="single_jobs white-bg d-flex justify-content-between">
-                            
-                           
+
+
                         </div>
                     </div>
                     <div class="descript_wrap white-bg">
                         <div class="single_wrap">
                             <h4>Edit Profile</h4>
                         </div>
-                        
+
                     <div class="apply_job_form white-bg">
-                      
+
                                 {# Display a form #}
 
                             <form method="post" class="form" enctype="multipart/form-data">
-                                
+
                                 {% csrf_token %}
                                 {% bootstrap_form userform %}
                                 {% bootstrap_form profileform %}
-                                
+                                {{companyform.media}}
+                                {% bootstrap_form companyform %}
                                 {% buttons %}
-                                    
+
                                         <button class="boxed-btn3 w-100" type="submit">Submit</button>
-                                    
-                                
+
+
                                 {% endbuttons %}
-                            </div> 
+                            </div>
                             </form>
                     </div>
                 </div>
-               
+
             </div>
         </div>
     </div>
     {% endblock %}
     <!-- footer start -->
-  
+
 </body>
 
 </html>

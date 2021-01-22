@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '^#e^%6rrrfd#fr4bdl(%u(j5$w3cjiq=4rs@v1o2&zyo+!39)!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['shoghl.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -63,7 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -71,7 +71,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': ['shoghl/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,7 +101,7 @@ DATABASES = {
     #     'ENGINE': 'django.db.backends.postgresql',
     #     'NAME': 'blog',
     #     'USER': 'blog',
-    #     'PASSWORD': '*****',    
+    #     'PASSWORD': '*****',
     # }
 }
 }
@@ -157,7 +157,7 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR/"media"
 
-# Mail configuration 
+# Mail configuration
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'osamass9000@gmail.com'
@@ -165,6 +165,6 @@ EMAIL_HOST_PASSWORD = 'Robot9000'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-import dj_database_url 
-prod_db  =  dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(prod_db)
+#import dj_database_url
+#prod_db  =  dj_database_url.config(conn_max_age=500)
+#DATABASES['default'].update(prod_db)

@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from .models import Category, Job
 from .forms import  JobForm
-from django.urls import reverse 
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .filters import JobFilter
 from accounts.forms import EmployeeForm, ProfileForm
@@ -34,7 +34,7 @@ def job_details (request, id):
     if request.method == 'POST':
         return redirect(reverse('jobs:application', args=[id]))
     context = {
-        "job_details": job_details,       
+        "job_details": job_details,
     }
     return render(request, "job/job_details.html", context)
 
@@ -45,7 +45,7 @@ def job_apply(request, id):
     user = request.user
     profile = Profile.objects.get(user=user)
     personal_info = user.candidate
-    
+
     profile_form = ProfileForm(instance=profile)
     personal_info_form = EmployeeForm(instance=personal_info)
     if request.method == "POST":
@@ -59,14 +59,17 @@ def job_apply(request, id):
             form3.jobs.add(job)
             personal_info_form.save_m2m()
             messages.success(request, 'Your application has been accepted !')
-            subject = f'{user.username} applied for your {job.title} job '
-            message = f"{personal_info.cover_letter}"
-            cv = request.FILES.getlist('cv')
-            mail = EmailMessage(subject, message, settings.EMAIL_HOST_USER, [job.owner.email])
-            for f in cv:
-                mail.attach(f.name, f.read(), f.content_type)
-            mail.send()
-            return redirect(reverse('jobs:job_list'))
+            try:
+                subject = f'{user.username} applied for your {job.title} job '
+                message = "Hi this is my CV, sir"
+                cv = request.FILES.getlist('cv')
+                mail = EmailMessage(subject, message, settings.EMAIL_HOST_USER, [job.owner.email])
+                for f in cv:
+                    mail.attach(f.name, f.read(), f.content_type)
+                mail.send()
+                return redirect(reverse('jobs:job_list'))
+            except:
+                return redirect(reverse('jobs:job_list'))
 
 
 
@@ -89,12 +92,12 @@ def add_job(request):
             myForm.save()
             return redirect(reverse("jobs:job_list"))
     else:
-        form = JobForm()     
+        form = JobForm()
 
     context = {
         "jobForm": form,
-    }       
-    
+    }
+
     return render(request, "job/add_job.html", context)
 
 def category_jobs(request, id):
@@ -114,7 +117,7 @@ def category_jobs(request, id):
 
 @login_required
 def like_btn(request, id):
-    
+
     job = Job.objects.get(id=id)
 
     if request.user not in job.likers.all():
@@ -124,9 +127,8 @@ def like_btn(request, id):
         "message": "like"
     })
     job.likers.remove(request.user)
-    
+
     return JsonResponse({
         'status': 'ok',
         "message": "dislike"
     })
-    

@@ -4,7 +4,7 @@
 {% block content %}
 {% if form1.errors %}
     {% for field in form1 %}
-        
+
         {% for error in field.errors %}
             <div class="alert alert-danger">
                 <strong>{{ error|escape }} {{field.label}}</strong>
@@ -32,18 +32,18 @@
         </div>
     {% endfor %}
 {% endif %}
-  
-  <form method="post">
+
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% bootstrap_form form1 %}
 
 
-    {% bootstrap_form form2 %}   
-    {{ form2.media}}                            
+    {% bootstrap_form form2 %}
+    {{ form2.media}}
     {% buttons %}
     <input class="boxed-btn3 w-100" type="submit" value="Sign Up" />
-    
+
     {% endbuttons %}
   </form>
-  
+
 {% endblock %}

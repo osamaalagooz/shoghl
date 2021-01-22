@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Job Board</title>
+    <title>Shoghl</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -29,28 +29,28 @@
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom_styles.css' %}">
-    
+
     {% block head %}
-        
+
     {% endblock head %}
-        
+
     <style>
-        
+
         .drop-link:hover{
             background-color: #00D363;
-          
+
         }
         .page-link:active{
             background-color: #00D363;
             color: white;
-          
-        }  
+
+        }
     </style>
-    
+
     {% block style %}
-        
+
     {% endblock style %}
-        
+
     <!-- <link rel="stylesheet" href="css/responsive.css"> -->
 </head>
 
@@ -81,16 +81,16 @@
                                             <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                                 <ul class="submenu">
                                                     <li><a href="{% url 'home:candidates'%}" class="drop-link">Candidates </a></li>
-                                                    <li><a href="{% url 'home:companies'%}" class="drop-link">Companies </a></li>                                                    
+                                                    <li><a href="{% url 'home:companies'%}" class="drop-link">Companies </a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="{% url 'blogs:blogs_list'%}">blog <i class="ti-angle-down"></i></a>
                                                 <ul class="submenu">
-                                                    
+
                                                     {% for category in categories  %}
-                                                    <li><a href="{% url 'blogs:blogs_category_list' category.id %}" class='drop-link'>{{category.title|title}}</a> </li>   
+                                                    <li><a href="{% url 'blogs:blogs_category_list' category.id %}" class='drop-link'>{{category.title|title}}</a> </li>
                                                     {% endfor %}
-                                                        
+
                                                 </ul>
                                             </li>
                                             <li><a href="{% url 'contact:conector'%}">Contact</a></li>
@@ -100,37 +100,44 @@
                             </div>
                             <div class="col-xl-3 col-lg-3 d-none d-lg-block" tyle="padding: 0px; width: 35%;">
                                 <div class="Appointment">
-                                    
+
                                     {% if request.user.is_authenticated %}
                                     <div class="phone_num d-none d-xl-block">
-                                        <a href="{% url 'register:profile' %}">Profile</a>
+
+                                        {% if request.user.company %}
+                                        <a href="{% url 'register:profile' request.user.id %}"><img src="{{request.user.company.logo.url}}" alt="avatar" width='40px' height="40px"></a>
+
+                                        {% else %}
+                                        <a href="{% url 'register:candidate_profile' request.user.id %}"><img src="{{request.user.candidate.image.url}}" alt="avatar" width='40px' height="40px"></a>
+                                        {% endif%}
+
                                     </div>
                                     <div class="phone_num d-none d-xl-block">
                                         <a href="{% url 'logout' %}">Log Out</a>
                                     </div>
-                                    {% else %}   
+                                    {% else %}
                                     <div class="phone_num d-none d-xl-block">
                                         <a href="{% url 'login' %}">Log in</a>
                                     </div>
                                     <div class="phone_num d-none d-xl-block">
-                                       
+
                                                 <ul id="navigation" style="padding: 0px;width: 100%;">
-                                
+
                                                     <li style="padding: 0px;width: 100%;"><a style="padding: 0px;" href="#">Sign Up<i style="padding: 0px;" class="ti-angle-down"></i></a>
                                                         <ul class="submenu">
-                                                            
-                                                            <li><a class='drop-link' href="{% url 'register:sign_up_candidate' %}" > As a Candidate</a> </li>   
+
+                                                            <li><a class='drop-link' href="{% url 'register:sign_up_candidate' %}" > As a Candidate</a> </li>
                                                             <li><a class='drop-link' href="{% url 'register:sign_up_company' %}" > As a Company</a> </li>
-                                                                
+
                                                         </ul>
                                                     </li>
 
                                                 </ul>
-                                            
+
                                     </div>
                                     {% endif %}
-                                        
-                                
+
+
                                     <div class="d-none d-lg-block">
                                         <a class="boxed-btn3" href="{% url 'jobs:jobEditor' %}">Post a Job</a>
                                     </div>
@@ -148,10 +155,10 @@
     </header>
     <!-- header-end -->
     {% block body %}
-        
-    
-        
-   
+
+
+
+
     {% endblock body %}
     <!-- footer start -->
     <footer class="footer">
@@ -307,8 +314,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                 " - $" + $( "#slider-range" ).slider( "values", 1 ) + "/ Year");
         } );
         </script>
-     <!-- like button functionality    -->
-    <!-- <script>
+     <!-- like button functionality -->
+
+    <script>
         function likeIt(job) {
           var jobId = job.getAttribute("data-set");
           console.log(jobId)
@@ -323,20 +331,20 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
                 heart.remove('ti-heart')
                 heart.add('fa', 'fa-heart')
-                document.getElementById(`counter${jobId}`).innerHTML = num + 1 
+                document.getElementById(`counter${jobId}`).innerHTML = num + 1
             } else {
                 heart.remove('fa', 'fa-heart')
                 heart.add('ti-heart')
                 document.getElementById(`counter${jobId}`).innerHTML = num - 1
             }
-           
-            
+
+
             console.log(data)})
           .catch(err => console.log(err))
-          
+
         }
-        
-        </script>     -->
+
+        </script>
 </body>
 
 </html>

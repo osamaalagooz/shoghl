@@ -6,14 +6,14 @@ from django.dispatch import receiver
 from ckeditor.fields import RichTextField
 from django.conf import settings
 from taggit.managers import TaggableManager
-from job.models import Category, Job 
+from job.models import Category, Job
 
 
 # Create your models here.
 def upload_company_image(instance, filename):
     extension = filename.split('.')[1]
     return 'companies/logos/%s.%s'%(instance.id, extension)
-   
+
 def upload_cv(instance, filename):
     extension = filename.split('.')[1]
     return 'candidaties/cvs/%s.%s'%(instance.id, extension)
@@ -27,29 +27,29 @@ class Profile(models.Model):
     user =  models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(max_length = 15)
     city = models.ForeignKey("City", on_delete=models.CASCADE, null=True, related_name='user_profile')
-    
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)    
+        Profile.objects.create(user=instance)
 
 class City(models.Model):
-    name = models.CharField(max_length = 50) 
+    name = models.CharField(max_length = 50)
 
     def __str__(self):
         return self.name
-    
+
 class Company(models.Model):
     logo = models.ImageField(upload_to=upload_company_image, null=True, blank=True)
     employee_num = models.IntegerField(default=0)
     description = RichTextField(blank=True, null=True)
     user =  models.OneToOneField(User, on_delete=models.CASCADE, related_name='company')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    
+
     def __str__(self):
         """Unicode representation of MODELNAME."""
-        return self.user.first_name
+        return self.user.username
 
 class Employee(models.Model):
     job_title = models.CharField(max_length = 13)
@@ -64,5 +64,4 @@ class Employee(models.Model):
     skills = TaggableManager()
     def __str__(self):
         return self.user.username
-    
-    
+

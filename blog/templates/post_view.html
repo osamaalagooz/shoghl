@@ -38,7 +38,7 @@
                    <p>
                       {{post.body|safe}}
                    </p>
-                   
+
                 </div>
              </div>
              <div class="navigation-top">
@@ -58,19 +58,19 @@
                      <!-- <p class="comment-count"><span class="align-middle"><i class="fa fa-comment"></i></span> 06 Comments</p> -->
                   </div>
                   <ul class="social-icons">
-                     <li><div class="fb-share-button" 
-                     data-href="{{ request.build_absolute_uri }}" 
+                     <li><div class="fb-share-button"
+                     data-href="{{ request.build_absolute_uri }}"
                      data-layout="button" data-size="small" data-mobile-iframe="false">
                         <a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse">
                            <i class="fa fa-facebook-f" style="font-size: large; color: #4267B2;"></i>
                         </a>
                      </div>
                   </li>
-      
-                  
+
+
                    </ul>
                 </div>
-                
+
              </div>
              <div class="blog-author">
                 <div class="media align-items-center">
@@ -90,7 +90,7 @@
                      </a>
                      <p>{{post.author.company.description|safe|truncatewords:20 }}</p>
                   </div>
-                  {% endif %}                   
+                  {% endif %}
             </div>
             <div id="area" class="comments-area">
                <h4>{{post.comments.count}} Comments</h4>
@@ -104,7 +104,7 @@
                            {% else %}
                            <img src="{{comment.commenter.company.logo.url}}" alt="img">
                            {% endif %}
-                           
+
                         </div>
                         <div class="desc">
                            <p class="comment">
@@ -123,7 +123,7 @@
                                        <div class="form-group">
                                           <textarea class="form-control w-100" name="reply" id="reply" cols="30" rows="5"
                                           placeholder="Write Comment"></textarea>
-                                       
+
                                        <button type="submit" class="btn btn-success">Submit</button>
                                        </div>
                                     </form>
@@ -134,7 +134,7 @@
                   </div>
                </div>
                 {% endfor %}
-               
+
              </div>
              <div class="comment-form">
                 <form class="form-contact comment_form" method="POST" id="commentForm">
@@ -148,12 +148,12 @@
                       <div id='toast-message-success' class="alert alert-success alert-dismissible" role="alert" style="width: 300px; display: none;" >
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         Message successfully sent !
-                        
+
                       </div>
                       <div id='toast-message-failed' class="alert alert-danger alert-dismissible" role="alert" style="width: 300px; display: none;" >
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         Oops, there is some thing wrong happened!
-                        
+
                       </div>
                       <div id="loading-icon" style="text-align: center; display: none;">
                         <i class="fa fa-circle-o-notch fa-spin" style="font-size:30px; width: auto;"></i>
@@ -170,6 +170,9 @@
           <div class="col-lg-4">
              <div class="blog_right_sidebar">
                 <aside class="single_sidebar_widget search_widget">
+                    {% if post %}
+                        <a href="{{post.get_absolute_url}}update" class="boxed-btn3" style="margin-bottom: 15px;"> Edit</a>
+                    {% endif %}
                    <form action="#">
                       <div class="form-group">
                          <div class="input-group mb-3">
@@ -193,14 +196,14 @@
                              <p>{{category.title}}</p>
                              <p>({{category.posts.count}})</p>
                          </a>
-                     </li> 
+                     </li>
                      {% endfor %}
                    </ul>
                 </aside>
                 <aside class="single_sidebar_widget popular_post_widget">
                   <h3 class="widget_title">Recent Posts</h3>
                   {% show_recent_posts 5%}
-                   
+
                </aside>
                <aside class="single_sidebar_widget tag_cloud_widget">
                   <h4 class="widget_title">Tag Clouds</h4>
@@ -210,8 +213,8 @@
                         <a href="#">{{tag}}</a>
                      </li>
                      {% endfor %}
-                     
-                     
+
+
                   </ul>
                </aside>
                <aside class="single_sidebar_widget popular_post_widget">
@@ -296,7 +299,7 @@
                                        <div class="form-group">
                                           {% csrf_token %}
                                           {% bootstrap_form reply_form %}
-                                       
+
                                        <button type="submit" class="btn btn-success">Submit</button>
                                        </div>
                                     </form>
@@ -346,19 +349,18 @@ function likeIt(post) {
 
                   heart.remove('ti-heart')
                   heart.add('fa', 'fa-heart')
-                  document.getElementById(`counter${postId}`).innerHTML = num + 1 
+                  document.getElementById(`counter${postId}`).innerHTML = num + 1
                } else {
                   heart.remove('fa', 'fa-heart')
                   heart.add('ti-heart')
                   document.getElementById(`counter${postId}`).innerHTML = num - 1
                }
-            
-               
+
+
                console.log(data)})
             .catch(err => console.log(err))
-            
+
          }
  </script>
 
 {% endblock body %}
-    

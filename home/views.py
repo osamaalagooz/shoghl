@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator
 from job.filters import JobFilter
 from django.shortcuts import render
-from job.models import Job, Category 
+from job.models import Job, Category
 from accounts.models import Employee, Company
 
 
@@ -25,14 +25,24 @@ def home_view(request):
 
 def candidates_view(request):
     candidates = Employee.objects.all()
-
-    return render(request,"candidate.html",{"candidates": candidates})
+    paginator = Paginator(candidates, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+        "candidates": page_obj,
+        }
+    return render(request,"candidate.html",context)
 
 
 def companies_view(request):
     companies = Company.objects.all()
-
-    return render(request,"companies.html",{"companies": companies})
+    paginator = Paginator(companies, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+        "companies": page_obj,
+        }
+    return render(request,"companies.html",context)
 # def category_jobs(request, id):
 #     category = Category.objects.get(id=id)
 #     jobs = category.jobs
